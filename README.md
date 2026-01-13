@@ -10,6 +10,9 @@ workshop codespaces
     # удалить все контейнеры, которые выведутся в docker ps -aq
     docker rm `docker ps -aq`  
 
+docker rm $(docker ps -aq)
+
+
     docker run -it --rm -v $(pwd)/test:/app/test --entrypoint=bash python:3.13.11-slim
 
 # при venv в корне проекта
