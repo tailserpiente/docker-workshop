@@ -71,4 +71,69 @@ docker network create pg-network
 
   http://localhost:8085
 
+uv run jupyter notebook
+docker-compose up -d 
+
+
+#под docker-compose - pipeline_default  
+
   
+ docker run -it --rm \
+ --network=pipeline_default \
+ taxi_ingest:v001 \
+   --pg-user=root \
+  --pg-pass=root \
+  --pg-host=pgdatabase \
+  --pg-port=5432 \
+  --pg-db=ny_taxi \
+  --target-table=yellow_taxi_trips_2 \
+  --year=2021 \
+  --month=1 \
+  --chunksize=100000
+
+
+
+
+ 
+Now we have zsh completion. Type "echo 'source /home/codespace/yandex-cloud/completion.zsh.inc' >>  ~/.zshrc" to install itTo complete installation, start a new shell (exec -l $SHELL) or type 'source "/home/codespace/.bashrc"' in the current one
+>  
+> echo 'source /home/codespace/yandex-cloud/completion.zsh.inc' >>  ~/.zshrc
+> source "/home/codespace/.bashrc"
+
+yc iam create-token --impersonate-service-account-id $SA_ID
+
+SA_ID=$(yc iam service-account get mlops-rns-sa --format json | jq -r '.id')
+export YC_TOKEN=$(yc iam create-token --impersonate-service-account-id $SA_ID)
+export YC_CLOUD_ID=$(yc config get cloud-id)
+export YC_FOLDER_ID=$(yc config get folder-id)
+
+ssh-keygen -t ed25519 -C "comment" -f ~/.ssh/vm_ed25519_key
+
+
+yandex_compute_instance.vm-2: Creation complete after 33s [id=fhmpjrcjomnqlk4c453n]
+yandex_compute_instance.vm-1: Creation complete after 33s [id=fhm314436jdj0pt0nrvu]
+
+Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+external_ip_address_vm_1 = "158.160.36.198"
+external_ip_address_vm_2 = "89.169.150.117"
+internal_ip_address_vm_1 = "192.168.10.20"
+internal_ip_address_vm_2 = "192.168.10.32"
+> 
+
+> yc compute instance get terraform1 --format json | jq '.network_interfaces[] | {ip_address: .primary_v4_address.address, nat_ip: .primary_v4_address.one_to_one_nat.address}'
+{
+  "ip_address": "192.168.10.20",
+  "nat_ip": "158.160.36.198"
+
+
+  ssh -i ~/.ssh/vm_admin_ed25519_key -l vm_admin 158.160.38.203
+
+
+  for vm in $(yc compute instance list --format json | jq -r '.[].name'); do
+    echo "Останавливаю $vm..."
+    yc compute instance stop $vm
+done
+
